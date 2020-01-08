@@ -42,23 +42,22 @@ def draw_iconic_digraph(matrix):
     nx.draw_networkx_nodes(G, pos)
     nx.draw_networkx_labels(G, pos)
 
-    # plt.show()
 
-
-def impulse_processes(matrix):
+def impulse_processes(matrix, n=1):
     cut = [1, 2, 4, 6, 11, 16]
     colors = ['red', 'green', 'blue', 'black', 'gold', 'violet']
     X0 = np.zeros(np.size(matrix, 1))
     X1 = X0.copy()
-    X1[12] = 1
+    X1[11] = 1
     facts = factors_table(matrix, X1, X0, 5)
     facts = facts[cut, :]
-    # draw_plot(facts, colors)
-    P0 = X1.copy()
-    tends = tendentions_table(matrix, P0, 8)
-    tends = tends[cut, :]
-    draw_plot(tends, colors)
-    # print(tends)
+    if n == 1:
+        draw_plot(facts, colors)
+    elif n == 2:
+        P0 = X1.copy()
+        tends = tendentions_table(matrix, P0, 8)
+        tends = tends[cut, :]
+        draw_plot(tends, colors)
 
 
 def draw_plot(facts, colors):
@@ -71,22 +70,22 @@ def mat_factors(matrix, X1, X0):
     return np.transpose((np.eye(np.size(matrix, 1)) + matrix) * X1 - matrix * X0)
 
 
-def mat_tendetion(matrix, P1):
-    return matrix * np.transpose(P1)
-
-
 def factors_table(matrix, X1, X0, num):
     X = np.matrix([X0, X1])
-    plt.xlim(0, 5), plt.ylim(-5, 5)
+    plt.xlim(0, num), plt.ylim(-5, 5)
     for s in range(1, num):
         X = np.concatenate((X, mat_factors(matrix, np.transpose(X[s - 1]), np.transpose(X[s]))))
     X = np.transpose(X)
     return X
 
 
+def mat_tendetion(matrix, P1):
+    return matrix * np.transpose(P1)
+
+
 def tendentions_table(matrix, P0, num):
     X = np.matrix(P0)
-    plt.xlim(0, 8), plt.ylim(-25, 25)
+    plt.xlim(0, 8), plt.ylim(-15, 15)
     for s in range(0, num):
         X = np.concatenate((X, np.transpose(mat_tendetion(matrix, X[s, :]))))
     X = np.transpose(X)
@@ -104,7 +103,7 @@ def main():
     else:
         print('The model is resistant to disturbances')
 
-    impulse_processes(matrix)
+    impulse_processes(matrix, 2)
     plt.show()
 
 
