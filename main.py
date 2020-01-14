@@ -95,7 +95,7 @@ def tendentions_table(matrix, P0, num):
 def main():
     # changed (16, 6)
     matrix = np.matrix(read_matrix())
-    # draw_iconic_digraph(matrix)
+    draw_iconic_digraph(matrix)
     max_root = get_max_abs_root_of_the_characteristic_equation(matrix)
     print('max_root = ', max_root)
     if max_root >= 1:
@@ -103,7 +103,7 @@ def main():
     else:
         print('The model is resistant to disturbances')
 
-    impulse_processes(matrix, 2)
+    # impulse_processes(matrix, 2)
     plt.show()
 
 
